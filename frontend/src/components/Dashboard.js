@@ -7,7 +7,7 @@ export default function Dashboard() {
   const [models, setModels] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Fetch models from backend
+  // Fetch all models from backend
   const fetchModels = async () => {
     try {
       const res = await axios.get('https://glb-viewer-app.onrender.com/api/models');
@@ -24,17 +24,30 @@ export default function Dashboard() {
   // Upload model
   const handleUpload = async (e) => {
     e.preventDefault();
-    if (!file) return;
+    if (!file) {
+      alert("Please select a file first.");
+      return;
+    }
+
     setLoading(true);
     const formData = new FormData();
     formData.append('file', file);
 
     try {
-      await axios.post('https://glb-viewer-app.onrender.com/api/models/upload', formData);
+      await axios.post(
+        'https://glb-viewer-app.onrender.com/api/models/upload',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
       setFile(null);
-      fetchModels();
+      fetchModels(); // refresh uploaded list
     } catch (err) {
-      console.error('Upload failed:', err);
+      console.error('Upload failed:', err.response || err.message);
+      alert('Upload failed! Check console for details.');
     } finally {
       setLoading(false);
     }
@@ -58,7 +71,7 @@ export default function Dashboard() {
           GLB Model Viewer Dashboard
         </h1>
         <p style={{ fontSize: '1rem', color: '#555' }}>
-          Upload, view, and manage your 3D GLB models easily.
+          Upload, view, and manage your 3D GLB models.
         </p>
       </header>
 
