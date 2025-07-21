@@ -12,6 +12,11 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
+// Default route for testing
+app.get('/', (req, res) => {
+  res.send('GLB Viewer Backend is running!');
+});
+
 const modelRouter = require('./routes/modelRoutes');
 app.use('/api/models', modelRouter);
 
