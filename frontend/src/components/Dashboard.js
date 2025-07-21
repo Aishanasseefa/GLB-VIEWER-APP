@@ -10,7 +10,7 @@ export default function Dashboard() {
   // Fetch models from backend
   const fetchModels = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/models');
+      const res = await axios.get('https://glb-viewer-app.onrender.com/api/models');
       setModels(res.data);
     } catch (err) {
       console.error('Error fetching models:', err);
@@ -30,7 +30,7 @@ export default function Dashboard() {
     formData.append('file', file);
 
     try {
-      await axios.post('http://localhost:5000/api/models/upload', formData);
+      await axios.post('https://glb-viewer-app.onrender.com/api/models/upload', formData);
       setFile(null);
       fetchModels();
     } catch (err) {
@@ -43,7 +43,7 @@ export default function Dashboard() {
   // Delete model
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/models/${id}`);
+      await axios.delete(`https://glb-viewer-app.onrender.com/api/models/${id}`);
       fetchModels();
     } catch (err) {
       console.error('Delete failed:', err);
