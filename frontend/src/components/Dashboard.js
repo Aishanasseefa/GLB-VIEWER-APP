@@ -7,7 +7,7 @@ export default function Dashboard() {
   const [models, setModels] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Fetch all models from backend
+  // Fetch models from backend
   const fetchModels = async () => {
     try {
       const res = await axios.get('https://glb-viewer-app.onrender.com/api/models');
@@ -24,30 +24,19 @@ export default function Dashboard() {
   // Upload model
   const handleUpload = async (e) => {
     e.preventDefault();
-    if (!file) {
-      alert("Please select a file first.");
-      return;
-    }
-
+    if (!file) return;
     setLoading(true);
     const formData = new FormData();
     formData.append('file', file);
 
     try {
-      await axios.post(
-        'https://glb-viewer-app.onrender.com/api/models/upload',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
-      );
+      await axios.post('https://glb-viewer-app.onrender.com/api/models/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
       setFile(null);
-      fetchModels(); // refresh uploaded list
+      fetchModels();
     } catch (err) {
-      console.error('Upload failed:', err.response || err.message);
-      alert('Upload failed! Check console for details.');
+      console.error('Upload failed:', err);
     } finally {
       setLoading(false);
     }
@@ -65,13 +54,12 @@ export default function Dashboard() {
 
   return (
     <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
-      {/* HEADER */}
       <header style={{ textAlign: 'center', marginBottom: '30px' }}>
         <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '10px' }}>
           GLB Model Viewer Dashboard
         </h1>
         <p style={{ fontSize: '1rem', color: '#555' }}>
-          Upload, view, and manage your 3D GLB models.
+          Upload, view, and manage your 3D GLB models easily.
         </p>
       </header>
 
@@ -85,7 +73,7 @@ export default function Dashboard() {
           background: '#f9f9f9',
           padding: '20px',
           borderRadius: '8px',
-          boxShadow: '0 4px 8px rgba(0,0,0,0.05)'
+          boxShadow: '0 4px 8px rgba(0,0,0,0.05)',
         }}
       >
         <input
@@ -103,14 +91,13 @@ export default function Dashboard() {
             border: 'none',
             borderRadius: '4px',
             fontSize: '16px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           {loading ? 'Uploading...' : 'Upload'}
         </button>
       </section>
 
-      {/* UPLOADED MODELS */}
       <h2 style={{ fontSize: '1.8rem', fontWeight: 'bold', marginBottom: '20px' }}>
         Uploaded Models
       </h2>
@@ -118,7 +105,7 @@ export default function Dashboard() {
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '20px'
+          gap: '20px',
         }}
       >
         {models.map((model) => (
@@ -130,7 +117,7 @@ export default function Dashboard() {
               padding: '16px',
               textAlign: 'center',
               boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-              backgroundColor: '#fff'
+              backgroundColor: '#fff',
             }}
           >
             <h3 style={{ marginBottom: '10px' }}>{model.name}</h3>
@@ -145,7 +132,7 @@ export default function Dashboard() {
                 border: 'none',
                 borderRadius: '4px',
                 cursor: 'pointer',
-                fontSize: '14px'
+                fontSize: '14px',
               }}
             >
               Delete
